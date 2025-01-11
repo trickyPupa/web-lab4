@@ -40,3 +40,4 @@ build/
 
 backend/.idea/
 backend/backend.iml
+backend/.env

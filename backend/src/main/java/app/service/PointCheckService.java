@@ -12,7 +12,7 @@ public class PointCheckService {
     @Inject
     private PointRepository pointRepository;
 
-    public Point check(PointDTO dto, User user) {
+    public Point createPoint(PointDTO dto, User user) {
         boolean result = checkAreaHit(dto);
 
         Point point = new Point();

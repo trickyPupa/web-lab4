@@ -1,13 +1,13 @@
 package app.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name="users")
 public class User implements Serializable {
@@ -19,10 +19,7 @@ public class User implements Serializable {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column()
-    private String passwordHash;
-
     @Column(nullable = false)
-    private String salt;
+    private String passwordHash;
 
 }
