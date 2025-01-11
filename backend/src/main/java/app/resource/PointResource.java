@@ -3,16 +3,15 @@ package app.resource;
 import app.DTO.PointDTO;
 import app.model.Point;
 import app.model.User;
-import app.repository.PointRepository;
-import app.repository.UserRepository;
+import app.service.AuthService;
 import app.service.PointCheckService;
+import app.service.PointIndexService;
 import app.utils.Auth;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 
 import java.util.List;
@@ -22,30 +21,22 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PointResource {
-    @Inject
+    @EJB
     private PointCheckService pointCheckService;
-
-    @Inject
-    private UserRepository userRepository;
-
-    @Inject
-    private PointRepository pointRepository;
+    @EJB
+    private AuthService authService;
+    @EJB
+    private PointIndexService pointIndexService;
 
     @POST
     public Point create(@Valid PointDTO dto, @Context SecurityContext securityContext) {
-        User user = getUser(securityContext);
+        User user = authService.getCurrentUser(securityContext);
         return pointCheckService.createPoint(dto, user);
     }
 
     @GET
     public List<Point> getAll(@Context SecurityContext securityContext) {
-        User user = getUser(securityContext);
-        return pointRepository.getPoints(user);
-    }
-
-    private User getUser(SecurityContext securityContext) {
-        User user = userRepository.findByUsername(securityContext.getUserPrincipal().getName());
-        if (user == null) throw new WebApplicationException(Response.Status.FORBIDDEN);
-        return user;
+        User user = authService.getCurrentUser(securityContext);
+        return pointIndexService.getAllByUser(user);
     }
 }

@@ -1,16 +1,12 @@
 package app.repository;
 
 import app.model.User;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-
 import java.io.Serializable;
 
-@RequestScoped
-@Named
+@Stateless
 public class UserRepository implements Serializable {
 
     @PersistenceContext(unitName = "web3")

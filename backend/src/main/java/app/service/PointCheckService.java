@@ -4,12 +4,12 @@ import app.DTO.PointDTO;
 import app.model.Point;
 import app.model.User;
 import app.repository.PointRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
-@ApplicationScoped
+@Stateless
 public class PointCheckService {
-    @Inject
+    @EJB
     private PointRepository pointRepository;
 
     public Point createPoint(PointDTO dto, User user) {

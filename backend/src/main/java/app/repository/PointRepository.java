@@ -2,15 +2,13 @@ package app.repository;
 
 import app.model.Point;
 import app.model.User;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Named
-@RequestScoped
+@Stateless
 public class PointRepository implements Serializable {
     @PersistenceContext(unitName = "web3")
     private EntityManager em;
@@ -20,12 +18,20 @@ public class PointRepository implements Serializable {
         em.persist(point);
     }
 
-    public List<Point> getPoints(User user) {
+    public List<Point> getPointsByUser(User user) {
         return em.createQuery(
                         "SELECT p FROM Point p WHERE user_id = :userId",
                         Point.class
                 )
                 .setParameter("user_id", user.getId())
+                .getResultList();
+    }
+
+    public List<Point> getPoints() {
+        return em.createQuery(
+                        "SELECT p FROM Point p ",
+                        Point.class
+                )
                 .getResultList();
     }
 }
