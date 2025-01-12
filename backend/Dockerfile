@@ -2,7 +2,7 @@ FROM quay.io/wildfly/wildfly:latest
 
 WORKDIR /opt/jboss/wildfly
 
-COPY target/WEB4.war /opt/jboss/wildfly/standalone/deployments/ROOT.war
+COPY target/web4.war standalone/deployments/ROOT.war
 
 EXPOSE 8080
 

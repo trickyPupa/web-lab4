@@ -10,7 +10,7 @@ import java.util.List;
 
 @Stateless
 public class PointRepository implements Serializable {
-    @PersistenceContext(unitName = "web3")
+    @PersistenceContext(unitName = "web4")
     private EntityManager em;
 
     public void save(Point point, User user) {

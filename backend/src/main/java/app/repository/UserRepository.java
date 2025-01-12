@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Stateless
 public class UserRepository implements Serializable {
 
-    @PersistenceContext(unitName = "web3")
+    @PersistenceContext(unitName = "web4")
     private EntityManager em;
 
     public User findByUsername(String username) {
