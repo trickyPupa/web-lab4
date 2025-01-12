@@ -1,0 +1,16 @@
+<div class="login-container">
+  <p-card header="Login">
+    <div class="p-fluid">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" type="text" pInputText [(ngModel)]="username">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <p-password id="password" [(ngModel)]="password"></p-password>
+      </div>
+      <button pButton type="button" label="Login" (click)="onSubmit()"></button>
+      <small class="p-error" *ngIf="errorMessage">{{errorMessage}}</small>
+    </div>
+  </p-card>
+</div>
