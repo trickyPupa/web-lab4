@@ -1,6 +1,8 @@
 package app.resource;
 
-import app.DTO.LoginDTO;
+import app.DTO.ErrorResponse;
+import app.DTO.LoginRequest;
+import app.DTO.SuccessResponse;
 import app.service.LoginService;
 import app.service.RegisterService;
 import app.utils.Auth;
@@ -14,11 +16,21 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import lombok.Data;
 
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthResource {
+    @Data
+    public static class Token {
+        private String token;
+
+        public Token(String token) {
+            this.token = token;
+        }
+    }
+
     @EJB
     private LoginService loginService;
 
@@ -27,29 +39,33 @@ public class AuthResource {
 
     @POST
     @Path("/login")
-    public Response login(@Valid LoginDTO dto) {
+    public Response login(@Valid LoginRequest dto) {
         try {
-            String token = loginService.login(dto.getUsername(), dto.getPassword());
+            Token token = new Token(loginService.login(dto.getUsername(), dto.getPassword()));
 
-            return Response.ok(token).build();
+            return Response.ok()
+                    .entity(new SuccessResponse(token))
+                    .build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred.")
+                    .entity(new ErrorResponse("Unknown error occurred"))
                     .build();
         }
     }
 
     @POST
     @Path("/register")
-    public Response register(@Valid LoginDTO dto) {
+    public Response register(@Valid LoginRequest dto) {
         try {
-            String token = registerService.register(dto.getUsername(), dto.getPassword());
+            Token token = new Token(registerService.register(dto.getUsername(), dto.getPassword()));
 
-            return Response.ok(token).build();
+            return Response.ok()
+                    .entity(new SuccessResponse(token))
+                    .build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred.")
+                    .entity(new ErrorResponse("Unknown error occurred"))
                     .build();
         }
     }
@@ -60,12 +76,12 @@ public class AuthResource {
     public Response logout(@Context SecurityContext securityContext) {
         try {
             return Response.ok()
-                    .entity("Successfully logged out")
+                    .entity(new SuccessResponse("Successfully logged out"))
                     .build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred.")
+                    .entity(new ErrorResponse("Unknown error occurred"))
                     .build();
         }
     }

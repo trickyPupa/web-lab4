@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PointDTO {
+public class PointRequest {
     @NotNull(message = "X cannot be null")
     @Size(min = -5, max = 5, message = "X must be between -5 and 5")
     private double x;

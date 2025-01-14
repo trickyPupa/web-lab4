@@ -1,6 +1,6 @@
 package app.resource;
 
-import app.DTO.PointDTO;
+import app.DTO.PointRequest;
 import app.model.Point;
 import app.model.User;
 import app.service.AuthService;
@@ -29,7 +29,7 @@ public class PointResource {
     private PointIndexService pointIndexService;
 
     @POST
-    public Point create(@Valid PointDTO dto, @Context SecurityContext securityContext) {
+    public Point create(@Valid PointRequest dto, @Context SecurityContext securityContext) {
         User user = authService.getCurrentUser(securityContext);
         return pointCheckService.createPoint(dto, user);
     }

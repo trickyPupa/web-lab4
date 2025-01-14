@@ -1,6 +1,6 @@
 package app.service;
 
-import app.DTO.PointDTO;
+import app.DTO.PointRequest;
 import app.model.Point;
 import app.model.User;
 import app.repository.PointRepository;
@@ -12,7 +12,7 @@ public class PointCheckService {
     @EJB
     private PointRepository pointRepository;
 
-    public Point createPoint(PointDTO dto, User user) {
+    public Point createPoint(PointRequest dto, User user) {
         boolean result = checkAreaHit(dto);
 
         Point point = new Point();
@@ -30,7 +30,7 @@ public class PointCheckService {
         return point;
     }
 
-    public boolean checkAreaHit(PointDTO dto) {
+    public boolean checkAreaHit(PointRequest dto) {
         double x = dto.getX();
         double y = dto.getY();
         double r = dto.getR();
