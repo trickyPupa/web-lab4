@@ -1,16 +1,34 @@
-<div class="login-container">
-  <p-card header="Login">
-    <div class="p-fluid">
-      <div class="field">
-        <label for="username">Username</label>
-        <input id="username" type="text" pInputText [(ngModel)]="username">
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <p-password id="password" [(ngModel)]="password"></p-password>
-      </div>
-      <button pButton type="button" label="Login" (click)="onSubmit()"></button>
-      <small class="p-error" *ngIf="errorMessage">{{errorMessage}}</small>
+<div class="page-container">
+    <app-header [showLogout]="false"></app-header>
+
+    <div class="login-container">
+        <p-card [header]="isLoginMode ? 'Login' : 'Register'">
+            <div class="p-fluid">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" pInputText [(ngModel)]="username"
+                           [class.ng-invalid]="submitted && !username">
+                    <small class="p-error" *ngIf="submitted && !username">Username is required</small>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <p-password id="password" [(ngModel)]="password" [feedback]="isLoginMode ? false : true"
+                                [class.ng-invalid]="submitted && !password"></p-password>
+                    <small class="p-error" *ngIf="submitted && !password">Password is required</small>
+                </div>
+
+                <button pButton type="button" [label]="isLoginMode ? 'Login' : 'Register'"
+                        (click)="onSubmit()" class="mb-3"></button>
+
+                <div class="text-center">
+                    <a href="#" (click)="toggleMode($event)">
+                        {{ isLoginMode ? 'Need an account? Register' : 'Already have an account? Login' }}
+                    </a>
+                </div>
+
+                <small class="p-error block text-center mt-3" *ngIf="errorMessage">{{errorMessage}}</small>
+            </div>
+        </p-card>
     </div>
-  </p-card>
 </div>

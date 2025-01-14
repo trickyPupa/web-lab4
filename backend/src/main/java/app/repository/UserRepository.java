@@ -4,9 +4,12 @@ import app.model.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.log4j.Log4j2;
+
 import java.io.Serializable;
 
 @Stateless
+@Log4j2
 public class UserRepository implements Serializable {
 
     @PersistenceContext(unitName = "web4")
@@ -33,5 +36,9 @@ public class UserRepository implements Serializable {
 
     public void delete(User user) {
         em.remove(em.contains(user) ? user : em.merge(user));
+    }
+
+    public void init() {
+        log.info("Initializing UserRepository " + em.toString());
     }
 }

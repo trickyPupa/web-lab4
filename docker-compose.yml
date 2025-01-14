@@ -5,7 +5,7 @@ services:
 
   database:
     image: postgres:latest
-    container_name: web4_db
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -23,8 +23,7 @@ services:
       - itmo
     ports:
       - "8080:8080"
-    volumes:
-      - ./backend/target:/opt/jboss/wildfly/standalone/deployments/
+      - "9990:9990"
     environment:
       DB_USER: tpupa
       DB_PASSWORD: postgres
@@ -50,7 +49,7 @@ services:
     image: nginx:stable-alpine
     container_name: nginx
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "80:80"
     depends_on:

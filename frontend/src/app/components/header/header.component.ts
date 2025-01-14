@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -8,15 +8,16 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  @Input() showLogout: boolean = false;
   studentInfo = {
-    name: 'Your Full Name',
-    group: 'P3200',
-    variant: '1234'
+    name: 'Timofey Labor',
+    group: 'P3225',
+    variant: '678'
   };
 
   constructor(
-    private authService: AuthService,
-    private router: Router
+      private authService: AuthService,
+      private router: Router
   ) {}
 
   logout(): void {
