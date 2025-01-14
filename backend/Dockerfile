@@ -2,7 +2,7 @@ FROM quay.io/wildfly/wildfly:latest
 
 WORKDIR /opt/jboss/wildfly
 
-COPY target/web4.war /opt/jboss/wildfly/standalone/deployments/ROOT.war
+COPY target/web4.war /opt/jboss/wildfly/standalone/deployments/web4.war
 
 RUN /opt/jboss/wildfly/bin/add-user.sh tpupa admin --silent
 

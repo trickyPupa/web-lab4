@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     networks:
       - itmo
+    env_file:
+      - ./backend/.env
     ports:
       - "8080:8080"
       - "9990:9990"
