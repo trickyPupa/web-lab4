@@ -1,0 +1,10 @@
+module info --name=org.postgresql 2>/dev/null || \
+module add --name=org.postgresql --resources=/opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.2.5.jar --dependencies=javax.api,javax.transaction.api
+
+# Добавляем драйвер, если он ещё не существует
+/subsystem=datasources/jdbc-driver=postgresql:read-resource 2>/dev/null || \
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql, driver-module-name=org.postgresql, driver-class-name=org.postgresql.Driver)
+
+# Добавляем DataSource, если он ещё не существует
+/subsystem=datasources/data-source=PostgresDS:read-resource 2>/dev/null || \
+data-source add --name=PostgresDS --jndi-name=java:/jdbc/PostgresDS --driver-name=postgresql --connection-url=jdbc:postgresql://database/area_checker --user-name=tpupa --password=postgres

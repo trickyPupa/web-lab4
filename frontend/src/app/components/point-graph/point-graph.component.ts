@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Output, EventEmitter, ViewChild, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, Output, EventEmitter, ViewChild, OnInit, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { Point } from '../../models/point.model';
 
 @Component({
@@ -24,6 +24,37 @@ export class PointGraphComponent implements OnInit, OnChanges {
       this.drawGraph();
     }
   }
+  validate(x: number, y: number, r: number) : boolean {
+    return (-5 <= x && x <= 5) && (-5 <= y && y <= 5) && (0 <= r && r <= 5);
+  }
+
+  @HostListener('click', ['$event'])
+  onCanvasClick(event: MouseEvent) {
+    if (!this.currentR) return;
+
+    const canvas = this.canvasRef.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    const xCoord = Math.round((x - centerX) / this.STEP * 100) / 100;
+    const yCoord = Math.round((centerY - y) / this.STEP * 100) / 100;
+
+    if (!this.validate(xCoord, yCoord, this.currentR)) return;
+
+    const point: Point = {
+      x: xCoord,
+      y: yCoord,
+      r: this.currentR,
+      result: false
+    };
+
+    this.pointClick.emit(point);
+  }
+
 
   private drawAxis(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     context.beginPath();
@@ -128,8 +159,8 @@ export class PointGraphComponent implements OnInit, OnChanges {
     this.points.forEach(point => {
       context.beginPath();
       context.arc(
-          centerX + point.x * this.STEP,
-          centerY - point.y * this.STEP,
+          centerX + (point.x * this.STEP / point.r) * this.currentR,
+          centerY - (point.y * this.STEP / point.r) * this.currentR,
           4,
           0,
           2 * Math.PI
@@ -151,36 +182,13 @@ export class PointGraphComponent implements OnInit, OnChanges {
     canvas.height = 500;
 
     this.drawGrid(canvas, context);
-    this.drawCircle(context, canvas.width / 2, canvas.height / 2, R / 2, 0, Math.PI / 2, false);
-    this.drawRect(context, canvas.width / 2, canvas.height / 2, -R, R / 2);
+    this.drawCircle(context, canvas.width / 2, canvas.height / 2, R / 2, Math.PI, 3* Math.PI / 2, false);
+    this.drawRect(context, canvas.width / 2, canvas.height / 2, R, R);
     this.drawTriangle(context, canvas.width / 2, canvas.height / 2,
-        canvas.width / 2, canvas.height / 2 - R,
-        canvas.width / 2 + R, canvas.height / 2);
+        canvas.width / 2, canvas.height / 2 + R,
+        canvas.width / 2 - R/2, canvas.height / 2);
     this.drawAxis(canvas, context);
     this.drawCoords(canvas, context);
     this.drawPoints(context);
-  }
-
-  onCanvasClick(event: MouseEvent) {
-    const canvas = this.canvasRef.nativeElement;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-
-    const xCoord = Math.round((x - centerX) / this.STEP * 100) / 100;
-    const yCoord = Math.round((centerY - y) / this.STEP * 100) / 100;
-
-    if (this.currentR) {
-      this.pointClick.emit({
-        x: xCoord,
-        y: yCoord,
-        r: this.currentR,
-        result: false,
-        timestamp: new Date()
-      });
-    }
   }
 }

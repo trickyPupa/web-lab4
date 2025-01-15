@@ -1,8 +1,8 @@
 package app.service;
 
+import app.exception.RegistrationException;
 import app.model.User;
 import app.repository.UserRepository;
-import app.utils.JwtUtils;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +14,12 @@ public class RegisterService {
     @EJB
     private UserRepository userRepository;
 
-    public String register(String username, String password) {
+    public void register(String username, String password) {
+        if(userRepository.findByUsername(username) != null) {
+            log.warn("Username is already in use");
+            throw new RegistrationException("Username is already in use");
+        }
+
         User user = new User();
         user.setUsername(username);
 
@@ -23,8 +28,5 @@ public class RegisterService {
 
         userRepository.save(user);
         log.info("User {} registered successfully", username);
-
-
-        return JwtUtils.generateToken(user.getUsername());
     }
 }

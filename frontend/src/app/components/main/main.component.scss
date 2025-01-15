@@ -4,17 +4,52 @@
   flex-direction: column;
 
   .content {
-    padding: 1rem;
+    padding: 2rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: 400px 1fr;
+    gap: 2rem;
     height: calc(100vh - 64px);
     overflow: auto;
 
     .input-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      height: fit-content;
+
       .field {
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        width: 100%;
+
+        label {
+          display: block;
+          margin-bottom: 0.5em;
+          margin-top: 0.5px;
+          font-weight: 500;
+        }
+
+        input, p-multiSelect {
+          width: 100% !important;
+          min-width: 100px;
+        }
       }
+
+      button {
+        margin: 0.3em;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .main-container .content {
+    grid-template-columns: 1fr;
+
+    .input-section {
+      max-width: 600px;
+      margin: 0 auto;
     }
   }
 }

@@ -7,8 +7,7 @@ import app.DTO.response.PointResponse;
 import app.model.Point;
 import app.model.User;
 import app.service.AuthService;
-import app.service.PointCheckService;
-import app.service.PointIndexService;
+import app.service.PointService;
 import app.utils.Auth;
 import jakarta.ejb.EJB;
 import jakarta.validation.Valid;
@@ -26,11 +25,9 @@ import lombok.extern.log4j.Log4j2;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PointResource {
     @EJB
-    private PointCheckService pointCheckService;
+    private PointService pointService;
     @EJB
     private AuthService authService;
-    @EJB
-    private PointIndexService pointIndexService;
 
     @POST
     public Response create(@Valid PointRequest dto, @Context SecurityContext securityContext) {
@@ -42,7 +39,7 @@ public class PointResource {
                     .build();
         }
 
-        Point point = pointCheckService.createPoint(dto, user);
+        Point point = pointService.createPoint(dto, user);
         return Response.ok()
                 .entity(new SuccessResponse(new PointResponse(point)))
                 .build();
@@ -58,8 +55,26 @@ public class PointResource {
                     .build();
         }
 
-        var result = pointIndexService.getAllByUser(user);
-        log.info("point get all result: {}", result.toString());
+        var result = pointService.getAllByUser(user);
+        log.info("point get all results: {}", result.size());
+
+        return Response.ok()
+                .entity(new SuccessResponse(result))
+                .build();
+    }
+
+    @DELETE
+    public Response deleteAll(@Context SecurityContext securityContext) {
+        log.info("point delete all request");
+        User user = authService.getCurrentUser(securityContext);
+        if (user == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse("User not found"))
+                    .build();
+        }
+
+        pointService.deleteAllByUser(user);
+
         return Response.ok()
                 .entity(new SuccessResponse())
                 .build();

@@ -27,17 +27,13 @@ export class MainComponent implements OnInit {
   selectedX: number[] = [];
   y: number | null = null;
   rOptions: SelectOption[] = [
-    { label: '-3', value: -3 },
-    { label: '-2', value: -2 },
-    { label: '-1', value: -1 },
-    { label: '0', value: 0 },
     { label: '1', value: 1 },
     { label: '2', value: 2 },
     { label: '3', value: 3 },
     { label: '4', value: 4 },
     { label: '5', value: 5 }
   ];
-  selectedR: number[] = [];
+  selectedR: number[] = [3];
   points: Point[] = [];
 
   constructor(private pointService: PointService) {}
@@ -52,23 +48,48 @@ export class MainComponent implements OnInit {
     });
   }
 
+  onXSelect(event: any): void {
+    this.selectedX = [event.value[event.value.length - 1]];
+  }
+
+  onRSelect(event: any): void {
+    this.selectedR = [event.value[event.value.length - 1]];
+  }
+
   checkPoint(clickedPoint?: Point): void {
+    let pointToCheck: Point;
+
     if (clickedPoint) {
-      this.pointService.checkPoint(clickedPoint).subscribe(result => {
-        this.points = [...this.points, result];
-      });
+      pointToCheck = clickedPoint;
     } else if (this.selectedX.length && this.y !== null && this.selectedR.length) {
-      const point: Point = {
+      pointToCheck = {
         x: this.selectedX[0],
         y: this.y,
         r: this.selectedR[0],
-        result: false,
-        timestamp: new Date()
+        result: false
       };
-
-      this.pointService.checkPoint(point).subscribe(result => {
-        this.points = [...this.points, result];
-      });
+    } else {
+      return;
     }
+
+    this.pointService.checkPoint(pointToCheck).subscribe({
+      next: (result) => {
+        this.points = [...(this.points || []), result];
+      },
+      error: (error) => {
+        console.error('Error checking point:', error);
+      }
+    });
+  }
+
+  clearPoints(): void {
+    this.pointService.deletePoints().subscribe({
+      next: () => {
+        this.loadPoints();
+      },
+      error: (error) => {
+        console.error('Error deleting points:', error);
+      }
+    });
   }
 }

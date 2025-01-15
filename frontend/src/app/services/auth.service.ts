@@ -34,9 +34,12 @@ export class AuthService {
         this.httpOptions
     ).pipe(
         tap((response: any) => {
-          console.info(response.token);
-          localStorage.setItem('token', response.token);
-          this.isAuthenticatedSubject.next(true);
+            if (response?.data?.token) {
+                localStorage.setItem('token', response.data.token);
+                this.isAuthenticatedSubject.next(true);
+            } else {
+                throw new Error('Token not received');
+            }
         })
     );
   }
@@ -47,14 +50,21 @@ export class AuthService {
         this.httpOptions
     ).pipe(
         tap((response: any) => {
-          console.info(response.token);
-          localStorage.setItem('token', response.token);
-          this.isAuthenticatedSubject.next(true);
+          if (response.success == true) {
+            this.isAuthenticatedSubject.next(true);
+          }
+          else {
+              throw new Error(response.data.message);
+          }
         })
     );
   }
 
   logout(): void {
+    this.http.post<any>(
+      `${this.API_URL}/auth/logout`,
+      { headers: this.getAuthHeaders() }
+    );
     localStorage.removeItem('token');
     this.isAuthenticatedSubject.next(false);
   }

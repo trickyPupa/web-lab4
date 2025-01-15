@@ -3,5 +3,4 @@ export interface Point {
   y: number;
   r: number;
   result: boolean;
-  timestamp: Date;
 }

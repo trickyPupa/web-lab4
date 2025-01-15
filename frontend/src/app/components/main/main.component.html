@@ -4,29 +4,42 @@
     <div class="content">
         <div class="input-section">
             <div class="field">
-                <label>X coordinate</label>
+                <label>X</label>
                 <p-multiSelect [options]="xOptions" [(ngModel)]="selectedX"
-                               [selectionLimit]="1"
+                               (onChange)="onXSelect($event)"
                                optionLabel="label"
                                optionValue="value"
-                               placeholder="Select X coordinate"></p-multiSelect>
+                               placeholder="Select X coordinate"
+                               [filter]="false"
+                               [showToggleAll]="false">
+                </p-multiSelect>
             </div>
 
             <div class="field">
-                <label>Y coordinate</label>
+                <label>Y</label>
                 <input type="number" pInputText [(ngModel)]="y"
                        placeholder="Enter Y coordinate (-3 to 5)"
-                       [min]="-3" [max]="5">
+                       [min]="-5" [max]="5">
             </div>
 
             <div class="field">
-                <label>R value</label>
+                <label>R</label>
                 <p-multiSelect [options]="rOptions" [(ngModel)]="selectedR"
-                               [selectionLimit]="1"
+                               (onChange)="onRSelect($event)"
                                optionLabel="label"
                                optionValue="value"
-                               placeholder="Select R value"></p-multiSelect>
+                               placeholder="Select R value"
+                               [filter]="false"
+                               [showToggleAll]="false">
+                </p-multiSelect>
             </div>
+
+            <button pButton type="button" label="Check Point"
+                    (click)="checkPoint()"
+                    [disabled]="!selectedX.length || y === null || !selectedR.length"></button>
+
+            <button pButton type="button" label="Clear"
+                    (click)="clearPoints()"></button>
         </div>
 
         <app-point-graph [points]="points"
@@ -40,7 +53,6 @@
                     <th>Y</th>
                     <th>R</th>
                     <th>Result</th>
-                    <th>Timestamp</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-point>
@@ -49,7 +61,6 @@
                     <td>{{point.y}}</td>
                     <td>{{point.r}}</td>
                     <td>{{point.result ? 'Hit' : 'Miss'}}</td>
-                    <td>{{point.timestamp | date:'medium'}}</td>
                 </tr>
             </ng-template>
         </p-table>

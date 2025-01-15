@@ -7,8 +7,10 @@ import app.repository.PointRepository;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
+import java.util.List;
+
 @Stateless
-public class PointCheckService {
+public class PointService {
     @EJB
     private PointRepository pointRepository;
 
@@ -26,7 +28,7 @@ public class PointCheckService {
         return point;
     }
 
-    public boolean checkAreaHit(PointRequest dto) {
+    protected boolean checkAreaHit(PointRequest dto) {
         double x = dto.getX();
         double y = dto.getY();
         double r = dto.getR();
@@ -41,5 +43,13 @@ public class PointCheckService {
             return true;
         }
         return false;
+    }
+
+    public List<Point> getAllByUser(User user) {
+        return pointRepository.getPointsByUser(user);
+    }
+
+    public void deleteAllByUser(User user) {
+        pointRepository.deletePointsByUser(user);
     }
 }

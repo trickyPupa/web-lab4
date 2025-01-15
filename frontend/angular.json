@@ -68,7 +68,10 @@
               "browserTarget": "angular-primeng-app:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "poll": 2000
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

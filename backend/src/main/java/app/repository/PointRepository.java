@@ -41,4 +41,12 @@ public class PointRepository implements Serializable {
                 )
                 .getResultList();
     }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void deletePointsByUser(User user) {
+        em.createQuery(
+                "DELETE FROM Point p WHERE p.user.id = :userId")
+                .setParameter("userId", user.getId())
+                .executeUpdate();
+    }
 }

@@ -3,6 +3,7 @@ package app.resource;
 import app.DTO.response.ErrorResponse;
 import app.DTO.request.LoginRequest;
 import app.DTO.response.SuccessResponse;
+import app.exception.RegistrationException;
 import app.service.LoginService;
 import app.service.RegisterService;
 import app.utils.Auth;
@@ -50,6 +51,7 @@ public class AuthResource {
                     .build();
 
         } catch (Exception e) {
+            log.error(e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(new ErrorResponse("Unknown error occurred"))
                     .build();
@@ -61,12 +63,22 @@ public class AuthResource {
     public Response register(@Valid LoginRequest dto) {
         log.info("point register request: {}", dto.toString());
         try {
-            Token token = new Token(registerService.register(dto.getUsername(), dto.getPassword()));
+            registerService.register(dto.getUsername(), dto.getPassword());
 
             return Response.ok()
-                    .entity(new SuccessResponse(token))
+                    .entity(new SuccessResponse("Register success"))
                     .build();
-        } catch (Exception e) {
+        }
+        catch (RegistrationException e) {
+            log.error(e.getMessage());
+            log.error("abob");
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getMessage()))
+                    .build();
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            log.error("cccc");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(new ErrorResponse("Unknown error occurred"))
                     .build();

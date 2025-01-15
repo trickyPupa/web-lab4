@@ -49,7 +49,8 @@ export class LoginComponent {
           this.submitted = false;
         },
         error: (error) => {
-          this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
+          this.errorMessage = error.error?.message || 'Username already in use';
+          // 'Registration failed. Please try again.'
         }
       });
     }
