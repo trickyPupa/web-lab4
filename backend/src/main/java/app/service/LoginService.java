@@ -1,5 +1,6 @@
 package app.service;
 
+import app.DTO.response.ErrorResponse;
 import app.model.User;
 import app.repository.UserRepository;
 import app.utils.JwtUtils;
@@ -19,7 +20,7 @@ public class LoginService {
         if (user == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("No such user.")
+                            .entity(new ErrorResponse("No such user."))
                             .build()
             );
         }
@@ -28,13 +29,11 @@ public class LoginService {
         if (!passwordMatches) {
             throw new WebApplicationException(
                     Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("Invalid password.")
+                            .entity(new ErrorResponse("Invalid password."))
                             .build()
             );
         }
 
         return JwtUtils.generateToken(user.getUsername());
     }
-
-
 }

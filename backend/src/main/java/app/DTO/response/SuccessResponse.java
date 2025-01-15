@@ -1,4 +1,4 @@
-package app.DTO;
+package app.DTO.response;
 
 public class SuccessResponse extends BaseResponse {
     public SuccessResponse() {}

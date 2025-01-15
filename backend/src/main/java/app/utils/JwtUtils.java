@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class JwtUtils {
 
-    private static final String SECRET = "your-secret-key";
+    private static final String SECRET = System.getenv("SECURITY_KEY");
 
     public static String generateToken(String username) {
         return JWT.create()

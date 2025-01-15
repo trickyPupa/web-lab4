@@ -1,6 +1,6 @@
 package app.service;
 
-import app.DTO.PointRequest;
+import app.DTO.request.PointRequest;
 import app.model.Point;
 import app.model.User;
 import app.repository.PointRepository;
@@ -20,10 +20,6 @@ public class PointCheckService {
         point.setY(dto.getY());
         point.setR(dto.getR());
         point.setResult(result);
-
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
 
         pointRepository.save(point, user);
 

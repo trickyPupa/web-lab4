@@ -2,9 +2,16 @@ FROM quay.io/wildfly/wildfly:latest
 
 WORKDIR /opt/jboss/wildfly
 
-COPY target/web4.war /opt/jboss/wildfly/standalone/deployments/web4.war
+RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
+COPY --chown=jboss:jboss target/web4/WEB-INF/lib/postgresql-42.7.4.jar /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/
+
+#COPY target/web4/WEB-INF/lib/postgresql-42.7.4.jar /opt/jboss/wildfly/modules/org/postgresql/main/
+#COPY config/postgresql-module.xml /opt/jboss/wildfly/modules/org/postgresql/main/module.xml
+
+COPY config/commands.cli /opt/jboss/wildfly/commands.cli
 
 RUN /opt/jboss/wildfly/bin/add-user.sh tpupa admin --silent
 
 EXPOSE 8080 9990
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+#CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+CMD ["/bin/bash", "-c", "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 & sleep 10 && /opt/jboss/wildfly/bin/jboss-cli.sh --file=/opt/jboss/wildfly/commands.cli && tail -f /dev/null"]

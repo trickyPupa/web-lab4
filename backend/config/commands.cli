@@ -1,0 +1,4 @@
+connect
+module add --name=org.postgresql --resources=/opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.7.4.jar --dependencies=javax.api,javax.transaction.api
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name="postgresql",driver-module-name="org.postgresql",driver-class-name=org.postgresql.Driver)
+data-source add --jndi-name=java:/jdbc/PostgresDS --name=PostgresDS --connection-url=jdbc:postgresql://database/area_checker --driver-name=postgresql --user-name=tpupa --password=postgres

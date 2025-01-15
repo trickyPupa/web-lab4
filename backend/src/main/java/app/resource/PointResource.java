@@ -1,6 +1,9 @@
 package app.resource;
 
-import app.DTO.PointRequest;
+import app.DTO.response.ErrorResponse;
+import app.DTO.request.PointRequest;
+import app.DTO.response.SuccessResponse;
+import app.DTO.response.PointResponse;
 import app.model.Point;
 import app.model.User;
 import app.service.AuthService;
@@ -12,10 +15,11 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import lombok.extern.log4j.Log4j2;
 
-import java.util.List;
-
+@Log4j2
 @Auth
 @Path("/point")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,14 +33,35 @@ public class PointResource {
     private PointIndexService pointIndexService;
 
     @POST
-    public Point create(@Valid PointRequest dto, @Context SecurityContext securityContext) {
+    public Response create(@Valid PointRequest dto, @Context SecurityContext securityContext) {
+        log.info("point create request: {}", dto.toString());
         User user = authService.getCurrentUser(securityContext);
-        return pointCheckService.createPoint(dto, user);
+        if (user == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse("User not found"))
+                    .build();
+        }
+
+        Point point = pointCheckService.createPoint(dto, user);
+        return Response.ok()
+                .entity(new SuccessResponse(new PointResponse(point)))
+                .build();
     }
 
     @GET
-    public List<Point> getAll(@Context SecurityContext securityContext) {
+    public Response getAll(@Context SecurityContext securityContext) {
+        log.info("point get all request");
         User user = authService.getCurrentUser(securityContext);
-        return pointIndexService.getAllByUser(user);
+        if (user == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse("User not found"))
+                    .build();
+        }
+
+        var result = pointIndexService.getAllByUser(user);
+        log.info("point get all result: {}", result.toString());
+        return Response.ok()
+                .entity(new SuccessResponse())
+                .build();
     }
 }

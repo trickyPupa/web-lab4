@@ -1,8 +1,8 @@
 package app.resource;
 
-import app.DTO.ErrorResponse;
-import app.DTO.LoginRequest;
-import app.DTO.SuccessResponse;
+import app.DTO.response.ErrorResponse;
+import app.DTO.request.LoginRequest;
+import app.DTO.response.SuccessResponse;
 import app.service.LoginService;
 import app.service.RegisterService;
 import app.utils.Auth;
@@ -17,7 +17,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,13 +35,13 @@ public class AuthResource {
 
     @EJB
     private LoginService loginService;
-
     @EJB
     private RegisterService registerService;
 
     @POST
     @Path("/login")
     public Response login(@Valid LoginRequest dto) {
+        log.info("login request: {}", dto.toString());
         try {
             Token token = new Token(loginService.login(dto.getUsername(), dto.getPassword()));
 
@@ -57,6 +59,7 @@ public class AuthResource {
     @POST
     @Path("/register")
     public Response register(@Valid LoginRequest dto) {
+        log.info("point register request: {}", dto.toString());
         try {
             Token token = new Token(registerService.register(dto.getUsername(), dto.getPassword()));
 
@@ -74,6 +77,7 @@ public class AuthResource {
     @Path("/logout")
     @Auth
     public Response logout(@Context SecurityContext securityContext) {
+        log.info("point logout request");
         try {
             return Response.ok()
                     .entity(new SuccessResponse("Successfully logged out"))
