@@ -9,21 +9,23 @@ import { Point } from '../models/point.model';
 export class PointService {
   private readonly API_URL = '/api';
 
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
-
-  constructor(private http: HttpClient) {}
+  constructor(
+      private http: HttpClient,
+      private authService: AuthService
+  ) {}
 
   checkPoint(point: Point): Observable<Point> {
-    return this.http.post<Point>(`${this.API_URL}/point`,
+    return this.http.post<Point>(
+        `${this.API_URL}/points/check`,
         point,
-        this.httpOptions);
+        { headers: this.authService.getAuthHeaders() }
+    );
   }
 
   getPoints(): Observable<Point[]> {
-    return this.http.get<Point[]>(`${this.API_URL}/point`);
+    return this.http.get<Point[]>(
+        `${this.API_URL}/points`,
+        { headers: this.authService.getAuthHeaders() }
+    );
   }
 }

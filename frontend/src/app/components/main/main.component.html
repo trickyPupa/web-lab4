@@ -3,32 +3,30 @@
 
     <div class="content">
         <div class="input-section">
-            <p-card header="Input Form">
-                <div class="p-fluid">
-                    <div class="field">
-                        <label>X coordinate</label>
-                        <p-multiSelect [options]="xOptions" [(ngModel)]="selectedX"
-                                       [maxSelectedLabels]="1" [selectionLimit]="1"
-                                       optionLabel="toString()"></p-multiSelect>
-                    </div>
+            <div class="field">
+                <label>X coordinate</label>
+                <p-multiSelect [options]="xOptions" [(ngModel)]="selectedX"
+                               [selectionLimit]="1"
+                               optionLabel="label"
+                               optionValue="value"
+                               placeholder="Select X coordinate"></p-multiSelect>
+            </div>
 
-                    <div class="field">
-                        <label>Y coordinate</label>
-                        <input type="number" pInputText [(ngModel)]="y"
-                               min="-5" max="3" step="0.1">
-                    </div>
+            <div class="field">
+                <label>Y coordinate</label>
+                <input type="number" pInputText [(ngModel)]="y"
+                       placeholder="Enter Y coordinate (-3 to 5)"
+                       [min]="-3" [max]="5">
+            </div>
 
-                    <div class="field">
-                        <label>Radius</label>
-                        <p-multiSelect [options]="rOptions" [(ngModel)]="selectedR"
-                                       [maxSelectedLabels]="1" [selectionLimit]="1"
-                                       optionLabel="toString()"></p-multiSelect>
-                    </div>
-
-                    <button pButton type="button" label="Check Point"
-                            (click)="checkPoint()"></button>
-                </div>
-            </p-card>
+            <div class="field">
+                <label>R value</label>
+                <p-multiSelect [options]="rOptions" [(ngModel)]="selectedR"
+                               [selectionLimit]="1"
+                               optionLabel="label"
+                               optionValue="value"
+                               placeholder="Select R value"></p-multiSelect>
+            </div>
         </div>
 
         <app-point-graph [points]="points"

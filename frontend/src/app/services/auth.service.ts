@@ -20,12 +20,21 @@ export class AuthService {
     this.isAuthenticatedSubject.next(!!localStorage.getItem('token'));
   }
 
+  getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    });
+  }
+
   login(username: string, password: string): Observable<any> {
     return this.http.post(`${this.API_URL}/auth/login`,
         { username, password },
         this.httpOptions
     ).pipe(
         tap((response: any) => {
+          console.info(response.token);
           localStorage.setItem('token', response.token);
           this.isAuthenticatedSubject.next(true);
         })
@@ -36,6 +45,12 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/auth/register`,
         { username, password },
         this.httpOptions
+    ).pipe(
+        tap((response: any) => {
+          console.info(response.token);
+          localStorage.setItem('token', response.token);
+          this.isAuthenticatedSubject.next(true);
+        })
     );
   }
 
