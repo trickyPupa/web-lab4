@@ -44,7 +44,7 @@ public class AuthResource {
     public Response login(@Valid LoginRequest dto) {
         log.info("login request: {}", dto.toString());
         try {
-            Token token = new Token(loginService.login(dto.getUsername(), dto.getPassword()));
+            Token token = new Token(loginService.login(dto.username(), dto.password()));
 
             return Response.ok()
                     .entity(new SuccessResponse(token))
@@ -63,7 +63,7 @@ public class AuthResource {
     public Response register(@Valid LoginRequest dto) {
         log.info("point register request: {}", dto.toString());
         try {
-            registerService.register(dto.getUsername(), dto.getPassword());
+            registerService.register(dto.username(), dto.password());
 
             return Response.ok()
                     .entity(new SuccessResponse("Register success"))
