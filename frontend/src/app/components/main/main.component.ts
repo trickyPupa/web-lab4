@@ -15,8 +15,8 @@ interface SelectOption {
 export class MainComponent implements OnInit {
   points: Point[] = [];
 
-  xValues = [-5, -4, -3, -2, -1, 0, 1, 2, 3];
-  rValues = [1, 2, 3, 4, 5];
+  xValues = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4];
+  rValues = [1, 2, 3, 4];
 
   y: number | null = null;
   selectedX: number[] = [];
