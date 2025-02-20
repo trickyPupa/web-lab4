@@ -183,10 +183,10 @@ export class PointGraphComponent implements OnInit, OnChanges {
 
     this.drawGrid(canvas, context);
     this.drawCircle(context, canvas.width / 2, canvas.height / 2, R / 2, Math.PI, 3* Math.PI / 2, false);
-    this.drawRect(context, canvas.width / 2, canvas.height / 2, R, R);
+    this.drawRect(context, canvas.width / 2, canvas.height / 2, R, -R);
     this.drawTriangle(context, canvas.width / 2, canvas.height / 2,
         canvas.width / 2, canvas.height / 2 + R,
-        canvas.width / 2 - R/2, canvas.height / 2);
+        canvas.width / 2 - R, canvas.height / 2);
     this.drawAxis(canvas, context);
     this.drawCoords(canvas, context);
     this.drawPoints(context);

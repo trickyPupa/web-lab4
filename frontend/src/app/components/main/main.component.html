@@ -4,34 +4,43 @@
     <div class="content">
         <div class="input-section">
             <div class="field">
-                <label>X</label>
-                <p-multiSelect [options]="xOptions" [(ngModel)]="selectedX"
-                               (onChange)="onXSelect($event)"
-                               optionLabel="label"
-                               optionValue="value"
-                               placeholder="Select X coordinate"
-                               [filter]="false"
-                               [showToggleAll]="false">
-                </p-multiSelect>
+                <label>X:</label>
+                <div class="checkbox-group">
+                    <div *ngFor="let x of xValues" class="checkbox-item">
+                        <input type="checkbox"
+                               [id]="'x_' + x"
+                               [value]="x"
+                               [checked]="selectedX.includes(x)"
+                               (change)="onXChange(x, $event)">
+                        <label [for]="'x_' + x">{{x}}</label>
+                    </div>
+                </div>
             </div>
 
             <div class="field">
-                <label>Y</label>
-                <input type="number" pInputText [(ngModel)]="y"
-                       placeholder="Enter Y coordinate (-3 to 5)"
-                       [min]="-5" [max]="5">
+                <label>Y:</label>
+                <input type="number"
+                       pInputText
+                       [(ngModel)]="y"
+                       (ngModelChange)="validateInput()"
+                       placeholder="Enter Y (-5 to 5)"
+                       [min]="-5"
+                       [max]="5">
+                <small class="error" *ngIf="yError">{{yError}}</small>
             </div>
 
             <div class="field">
-                <label>R</label>
-                <p-multiSelect [options]="rOptions" [(ngModel)]="selectedR"
-                               (onChange)="onRSelect($event)"
-                               optionLabel="label"
-                               optionValue="value"
-                               placeholder="Select R value"
-                               [filter]="false"
-                               [showToggleAll]="false">
-                </p-multiSelect>
+                <label>R:</label>
+                <div class="checkbox-group">
+                    <div *ngFor="let r of rValues" class="checkbox-item">
+                        <input type="checkbox"
+                               [id]="'r_' + r"
+                               [value]="r"
+                               [checked]="selectedR.includes(r)"
+                               (change)="onRChange(r, $event)">
+                        <label [for]="'r_' + r">{{r}}</label>
+                    </div>
+                </div>
             </div>
 
             <button pButton type="button" label="Check Point"

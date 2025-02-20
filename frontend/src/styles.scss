@@ -1,9 +1,7 @@
-/* PrimeNG Theme */
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
-/* Global Styles */
 body {
   margin: 0;
   padding: 0;
@@ -19,15 +17,14 @@ body {
   color: black;
 }
 
-/* Responsive Breakpoints */
-@media screen and (min-width: 1201px) {
+@media screen and (min-width: 1052px) {
   .container {
     max-width: 1200px;
     margin: 0 auto;
   }
 }
 
-@media screen and (min-width: 713px) and (max-width: 1200px) {
+@media screen and (min-width: 783px) and (max-width: 1052px) {
   .container {
     padding: 0 20px;
   }
@@ -38,7 +35,7 @@ body {
   }
 }
 
-@media screen and (max-width: 712px) {
+@media screen and (max-width: 783px) {
   .container {
     padding: 0 10px;
   }

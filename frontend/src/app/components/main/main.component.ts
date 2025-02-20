@@ -13,28 +13,16 @@ interface SelectOption {
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  xOptions: SelectOption[] = [
-    { label: '-3', value: -3 },
-    { label: '-2', value: -2 },
-    { label: '-1', value: -1 },
-    { label: '0', value: 0 },
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 }
-  ];
-  selectedX: number[] = [];
-  y: number | null = null;
-  rOptions: SelectOption[] = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 }
-  ];
-  selectedR: number[] = [3];
   points: Point[] = [];
+
+  xValues = [-5, -4, -3, -2, -1, 0, 1, 2, 3];
+  rValues = [1, 2, 3, 4, 5];
+
+  y: number | null = null;
+  selectedX: number[] = [];
+  selectedR: number[] = [3];
+  yError: string = '';
+  isValid: boolean = false;
 
   constructor(private pointService: PointService) {}
 
@@ -46,14 +34,6 @@ export class MainComponent implements OnInit {
     this.pointService.getPoints().subscribe(points => {
       this.points = points;
     });
-  }
-
-  onXSelect(event: any): void {
-    this.selectedX = [event.value[event.value.length - 1]];
-  }
-
-  onRSelect(event: any): void {
-    this.selectedR = [event.value[event.value.length - 1]];
   }
 
   checkPoint(clickedPoint?: Point): void {
@@ -91,5 +71,40 @@ export class MainComponent implements OnInit {
         console.error('Error deleting points:', error);
       }
     });
+  }
+
+  onXChange(value: number, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.selectedX = [value];
+    } else {
+      this.selectedX = this.selectedX.filter(x => x !== value);
+    }
+    this.validateInput();
+  }
+
+  onRChange(value: number, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.selectedR = [value];
+    } else {
+      this.selectedR = this.selectedR.filter(r => r !== value);
+    }
+    this.validateInput();
+  }
+
+  validateInput() {
+    if (this.y === null) {
+      this.yError = 'Y coordinate is required';
+    } else if (this.y < -5 || this.y > 5) {
+      this.yError = 'Y must be between -5 and 5';
+    } else {
+      this.yError = '';
+    }
+
+    this.isValid = this.selectedX.length > 0 &&
+        this.selectedR.length > 0 &&
+        this.y !== null &&
+        !this.yError;
   }
 }
