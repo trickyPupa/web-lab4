@@ -33,10 +33,10 @@ public class PointService {
         double y = dto.getY();
         double r = dto.getR();
 
-        if (x >= 0 && y <= 0 && y >= -r && x <= r) {
+        if (x >= 0 && y >= 0 && y <= r && x <= r) {
             return true;
         }
-        else if (x <= 0 && y <= 0 && y >= -2 * x - r) {
+        else if (x <= 0 && y <= 0 && y >= -x - r) {
             return true;
         }
         else if (x <= 0 && y >= 0 && x*x + y*y <= r*r/4) {
