@@ -1,7 +1,7 @@
 package app.resource;
 
 import app.DTO.response.ErrorResponse;
-import app.DTO.request.PointRequest;
+import app.DTO.request.CreatePointRequest;
 import app.DTO.response.SuccessResponse;
 import app.DTO.response.PointResponse;
 import app.model.Point;
@@ -30,7 +30,7 @@ public class PointResource {
     private AuthService authService;
 
     @POST
-    public Response create(@Valid PointRequest dto, @Context SecurityContext securityContext) {
+    public Response create(@Valid CreatePointRequest dto, @Context SecurityContext securityContext) {
         log.info("point create request: {}", dto.toString());
         User user = authService.getCurrentUser(securityContext);
         if (user == null) {

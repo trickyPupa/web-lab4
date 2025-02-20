@@ -1,6 +1,6 @@
 package app.service;
 
-import app.DTO.request.PointRequest;
+import app.DTO.request.CreatePointRequest;
 import app.model.Point;
 import app.model.User;
 import app.repository.PointRepository;
@@ -14,13 +14,13 @@ public class PointService {
     @EJB
     private PointRepository pointRepository;
 
-    public Point createPoint(PointRequest dto, User user) {
+    public Point createPoint(CreatePointRequest dto, User user) {
         boolean result = checkAreaHit(dto);
 
         Point point = new Point();
-        point.setX(dto.getX());
-        point.setY(dto.getY());
-        point.setR(dto.getR());
+        point.setX(dto.x());
+        point.setY(dto.y());
+        point.setR(dto.r());
         point.setResult(result);
 
         pointRepository.save(point, user);
@@ -28,10 +28,10 @@ public class PointService {
         return point;
     }
 
-    protected boolean checkAreaHit(PointRequest dto) {
-        double x = dto.getX();
-        double y = dto.getY();
-        double r = dto.getR();
+    protected boolean checkAreaHit(CreatePointRequest dto) {
+        double x = dto.x();
+        double y = dto.y();
+        double r = dto.r();
 
         if (x >= 0 && y >= 0 && y <= r && x <= r) {
             return true;
