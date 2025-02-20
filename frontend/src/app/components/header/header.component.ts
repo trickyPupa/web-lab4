@@ -10,9 +10,9 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent {
   @Input() showLogout: boolean = false;
   studentInfo = {
-    name: 'Timofey Labor',
-    group: 'P3225',
-    variant: '678'
+    name: 'Знаменский Александр',
+    group: 'P3223',
+    variant: '4451'
   };
 
   constructor(
